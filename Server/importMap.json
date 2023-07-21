@@ -1,0 +1,11 @@
+{
+  "imports": {
+    "preact": "https://esm.sh/preact",
+    "preact/compat": "https://esm.sh/preact/compat",
+    "preact/hooks": "https://esm.sh/preact/hooks",
+    "preact-render-to-string": "https://esm.sh/preact-render-to-string?deps=preact",
+    "svg-path-commander": "https://cdn.jsdelivr.net/npm/svg-path-commander/dist/svg-path-commander.esm.min.js",
+    "mini-svg-data-uri": "https://cdn.skypack.dev/mini-svg-data-uri",
+    "react-spring": "https://cdn.skypack.dev/react-spring"
+  }
+}
