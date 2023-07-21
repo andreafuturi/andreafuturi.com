@@ -56,18 +56,18 @@ async function handler(_req) {
   try {
     //prod mode
 
-    const html = index.replace(`<div id="app">`, `<div id="app">${renderSSR(<Home />)}`).replace(`<script type="module" crossorigin src="/assets/index.4abc4036.js"></script>`,`<script defer async type="module" crossorigin src="/Assets/Scripts/index.js"></script>`)
-    return new Response( html, {
-      headers: { "content-type": "text/html; charset=utf-8" },
-    })
-
-    //dev mode
-    // loading index.html in prod should be done when server boots
-    // const index = await Deno.readTextFile('./Client/index.html')
-    // const html = index.replace(`<div id="app">`, `<div id="app">${renderSSR(<Home />)}`).replace(`<script type="module" src="./index.jsx"></script>`,`<script defer async type="module" src="http://localhost:3000/index.jsx"></script>`)
+    // const html = index.replace(`<div id="app">`, `<div id="app">${renderSSR(<Home />)}`).replace(`<script type="module" crossorigin src="/assets/index.4abc4036.js"></script>`,`<script defer async type="module" crossorigin src="/Assets/Scripts/index.js"></script>`)
     // return new Response( html, {
     //   headers: { "content-type": "text/html; charset=utf-8" },
     // })
+
+    // dev mode
+    // loading index.html in prod should be done when server boots
+    const index = await Deno.readTextFile('./Client/index.html')
+    const html = index.replace(`<div id="app">`, `<div id="app">${renderSSR(<Home />)}`).replace(`<script type="module" src="./index.jsx"></script>`,`<script defer async type="module" src="http://localhost:3000/index.jsx"></script>`)
+    return new Response( html, {
+      headers: { "content-type": "text/html; charset=utf-8" },
+    })
 
   }
   catch(problem) { return new Response(`<div style='text-align: center;font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;margin-top: 50vh;color: red;'>${problem}<br /><span style="color:#000">${problem.stack}</span></div>`, { headers: { "content-type": "text/html; charset=utf-8" },}) }
