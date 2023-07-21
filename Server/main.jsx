@@ -7,7 +7,7 @@ import Home from '../Client/index.jsx'
 
 // Create refresh middleware
 const middleware = refresh()
-const index = await Deno.readTextFile('./Client/dist/index.html')
+const index = await Deno.readTextFile('./Client/dist/prod.html')
 async function handler(_req) {
   const { pathname } = new URL(_req.url)
 
