@@ -6919,10 +6919,9 @@ function Gl() {
       height: 10,
       spacing: 1e4,
       children: [
-        L(rt, { x: -9e3, animated: !0, loop: !0, children: e }),
+        L(rt, { x: -9e3, loop: !0, children: e }),
         L(rt, {
           x: 9e3,
-          animated: !0,
           loop: !0,
           children: L(rt, { y: 17500, scale: 0.5, children: e }),
         }),
