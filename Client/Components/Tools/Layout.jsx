@@ -59,7 +59,7 @@ const Light = (props) => {
   const [mouseX, setMouseX] = useState(props.width/2);
   const [mouseY, setMouseY] = useState(props.height/2);
   const [z, setZ] = useState(10000);
-  if (window.isBrowser) {
+  if (window.isBrowser && window.matchMedia('(min-device-width: 960px)').matches) {
    useMousePosition({
       onChange: ({ value }) => {
         setMouseX((value.x / window.innerWidth) * props.width);
@@ -73,6 +73,8 @@ const Light = (props) => {
           setZ((prevZ) => prevZ - 2000);
         }
       });
+  } else {
+    setZ(15000)
   }
 
   return (
