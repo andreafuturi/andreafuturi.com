@@ -1,0 +1,135 @@
+.sposta {
+	transform: translateY(400px)
+  }
+  text,p {
+	font-family: Objectivity, sans-serif;
+	text-anchor: middle;
+	dominant-baseline: middle;
+  }
+  use, .t,g {
+	transform-origin: center;
+	transform-box: fill-box;
+  }
+  /* image {
+	width: 100%;
+	height: 100%;
+  } */
+  html, body {
+	height: 100%;
+  }
+  body {
+	margin: 0;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	overflow: hidden !important;
+    font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  }
+  svg {
+	overflow: visible !important;
+  }
+  filter {
+	color-interpolation-filters: sRGB;
+  }
+  :root {
+	--blue: hsl(195.6deg, 100%, 50%);
+	--blue2: hsl(225.6deg, 100%, 50%);
+	--gold: hsl(45.6deg, 100%, 50%);
+	--gold2: hsl(15.6deg, 100%, 50%);
+  }
+/*   
+  @font-face {
+	font-family: Objectivity;
+	font-weight: 900;
+	font-style: normal;
+	src: url('Fonts/Objectivity/Objectivity-Super.otf');
+  }
+  @font-face {
+	font-family: Objectivity;
+	font-weight: 900;
+	font-style: italic;
+	src: url('Fonts/Objectivity/Objectivity-SuperSlanted.otf');
+  }
+  @font-face {
+	font-family: Objectivity;
+	font-weight: 800;
+	font-style: normal;
+	src: url('Fonts/Objectivity/Objectivity-Black.otf');
+  }
+  @font-face {
+	font-family: Objectivity;
+	font-weight: 800;
+	font-style: italic;
+	src: url('Fonts/Objectivity/Objectivity-BlackSlanted.otf');
+  }
+  @font-face {
+	font-family: Objectivity;
+	font-weight: 700;
+	font-style: normal;
+	src: url('Fonts/Objectivity/Objectivity-ExtraBold.otf');
+  }
+  @font-face {
+	font-family: Objectivity;
+	font-weight: 700;
+	font-style: italic;
+	src: url('Fonts/Objectivity/Objectivity-ExtraBoldSlanted.otf');
+  }
+  @font-face {
+	font-family: Objectivity;
+	font-weight: 600;
+	font-style: normal;
+	src: url('Fonts/Objectivity/Objectivity-Bold.otf');
+  }
+  @font-face {
+	font-family: Objectivity;
+	font-weight: 600;
+	font-style: italic;
+	src: url('Fonts/Objectivity/Objectivity-BoldSlanted.otf');
+  }
+  @font-face {
+	font-family: Objectivity;
+	font-weight: 500;
+	font-style: normal;
+	src: url('Fonts/Objectivity/Objectivity-Medium.otf');
+  }
+  @font-face {
+	font-family: Objectivity;
+	font-weight: 500;
+	font-style: italic;
+	src: url('Fonts/Objectivity/Objectivity-MediumSlanted.otf');
+  }
+  @font-face {
+	font-family: Objectivity;
+	font-weight: 400;
+	font-style: normal;
+	src: url('Fonts/Objectivity/Objectivity-Regular.otf');
+  }
+  @font-face {
+	font-family: Objectivity;
+	font-weight: 400;
+	font-style: italic;
+	src: url('Fonts/Objectivity/Objectivity-RegularSlanted.otf');
+  }
+  @font-face {
+	font-family: Objectivity;
+	font-weight: 300;
+	font-style: normal;
+	src: url('Fonts/Objectivity/Objectivity-Light.otf');
+  }
+  @font-face {
+	font-family: Objectivity;
+	font-weight: 300;
+	font-style: italic;
+	src: url('Fonts/Objectivity/Objectivity-LightSlanted.otf');
+  }
+  @font-face {
+	font-family: Objectivity;
+	font-weight: 200;
+	font-style: normal;
+	src: url('Fonts/Objectivity/Objectivity-Thin.otf');
+  }
+  @font-face {
+	font-family: Objectivity;
+	font-weight: 200;
+	font-style: italic;
+	src: url('Fonts/Objectivity/Objectivity-ThinSlanted.otf');
+  } */
