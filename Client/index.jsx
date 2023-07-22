@@ -1,4 +1,4 @@
-import { hydrate} from "preact"
+import { hydrate, render} from "preact"
 import Home from './Pages/Views/Home.jsx'
 // import Atom from "./Components/Atom.jsx"
 // import Circle from "./Components/Tools/Circle.jsx"
@@ -8,12 +8,20 @@ import Home from './Pages/Views/Home.jsx'
 
 //vite hmr for development
 window.isBrowser = typeof document !== "undefined"
+
+//disable rendering on server (ssr)
+window.ssr = true
+
+window.prod = true
+window.isMobile = 'ontouchstart' in window
 // window.Atom = Atom
 // window.Circle = Circle
 // window.Merge = Merge
 // window.Grid = Grid
 
+
+const renderFn = window.ssr ? hydrate : render
 if (window.isBrowser) {
-  hydrate(<Home />, document.querySelector("#app"))
+  renderFn(<Home />, document.querySelector("#app"))
 }
 export default Home
