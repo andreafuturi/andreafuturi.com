@@ -10,7 +10,7 @@ import Home from './Pages/Views/Home.jsx'
 window.isBrowser = typeof document !== "undefined"
 
 //disable rendering on server (ssr)
-window.ssr = true
+window.ssr = false
 
 window.prod = true
 window.isMobile = 'ontouchstart' in window
