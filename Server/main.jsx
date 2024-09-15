@@ -2,6 +2,8 @@ import { render as renderSSR } from 'https://esm.sh/preact-render-to-string?deps
 import { serve } from "https://deno.land/std/http/server.ts"
 import { refresh } from "https://deno.land/x/refresh/mod.ts"
 import { getNetworkAddr } from 'https://deno.land/x/local_ip/mod.ts';
+import { serveDir } from "https://deno.land/std@0.208.0/http/file_server.ts";
+
 import Home from '../Client/index.jsx'
 
 
@@ -11,7 +13,12 @@ const middleware = refresh()
 const index = await Deno.readTextFile('./Client/index.html')
 async function handler(_req) {
   const { pathname } = new URL(_req.url)
-
+  if (pathname.startsWith("/Assets/")) {
+    return serveDir(_req, {
+      fsRoot: "Client/Assets",
+      urlRoot: "Assets",
+    });
+  }
   //static svg
   if (pathname.startsWith("/Cache/")) {
     const file = await Deno.readTextFile('.'+pathname)
