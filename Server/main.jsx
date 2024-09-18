@@ -23,7 +23,7 @@ async function handler(_req) {
     })
   }
     //static favicon
-  if (pathname.startsWith("/Assets/favicon.svg")) {
+  if (pathname.endsWith(".svg")) {
     const file = await Deno.readTextFile('.'+pathname)
     return new Response(file, {
       headers: {
