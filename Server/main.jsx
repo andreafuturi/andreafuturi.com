@@ -31,6 +31,15 @@ async function handler(_req) {
       },
     })
   }
+      //static pdf
+  if (pathname.startsWith("/Assets/pdf")) {
+    const file = await Deno.readTextFile('.'+pathname)
+    return new Response(file, {
+      headers: {
+        "content-type": "application/pdf",
+      },
+    })
+  }
   //static js
   if (pathname.startsWith("/Assets/Scripts")) {
     const file = await Deno.readTextFile('.'+pathname)
