@@ -10,6 +10,7 @@ import Home from '../Client/index.jsx'
 // Create refresh middleware
 const middleware = refresh()
 const index = await Deno.readTextFile('./Client/index.html')
+const grazie = await Deno.readTextFile('./Client/grazie.html')
 async function handler(_req) {
   const { pathname } = new URL(_req.url)
 
@@ -17,6 +18,14 @@ async function handler(_req) {
   if (pathname.startsWith("/Cache/")) {
     const file = await Deno.readTextFile('.'+pathname)
     return new Response(file, {
+      headers: {
+        "content-type": "text/html; charset=utf-8"
+      },
+    })
+  }
+   //thank you page
+  if (pathname.startsWith("/grazie")) {
+    return new Response(grazie, {
       headers: {
         "content-type": "image/svg+xml",
       },
