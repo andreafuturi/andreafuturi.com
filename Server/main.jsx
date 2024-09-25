@@ -19,7 +19,7 @@ async function handler(_req) {
     const file = await Deno.readTextFile('.'+pathname)
     return new Response(file, {
       headers: {
-        "content-type": "text/html; charset=utf-8"
+        "content-type": "image/svg+xml",
       },
     })
   }
@@ -27,7 +27,8 @@ async function handler(_req) {
   if (pathname.startsWith("/grazie")) {
     return new Response(grazie, {
       headers: {
-        "content-type": "image/svg+xml",
+        "content-type": "text/html; charset=utf-8"
+        
       },
     })
   }
