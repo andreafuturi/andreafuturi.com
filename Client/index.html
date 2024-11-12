@@ -97,8 +97,8 @@
   }
 }
 button:disabled {
-  opacity: 0.5; /* Adjust the opacity value as needed */
-  cursor: not-allowed; /* Optionally change the cursor to indicate it's disabled */
+  opacity: 0.5;
+  cursor: not-allowed; 
 }
 
   #contextText {
@@ -151,7 +151,7 @@ button:disabled {
       <p>3. If you scroll you can increase or decrease light intensity.</p>
       
       <p>4. If you click a logo it will change its color.</p>
-          <button id="loadingButton" disabled>Loading...</button>
+          <button id="loadingButton" disabled><span style="position: relative; z-index: 9999;">Loading...</span></button>
     </div>
       <p style="max-width: 340px; padding: 20px;  font-size: 12px; font-weight: 200;">Made with DenoJS, React, React Spring and a special animation library I made to animate SVGs.</p>
 
