@@ -54,30 +54,49 @@
     font-size: 16px;
     text-align: center;
   }
-  #loadingButton {
-    margin-top: 40px;
-    margin-bottom: 15px;
-    padding: 10px 20px;
-    background-color: transparent;
-    color: white;
-    border: 1px solid #0000;
-    border-radius: 12px;
-    background: linear-gradient(#131219, #131219) padding-box, linear-gradient(var(--angle), #070707, #00bdff, #0182ff) border-box;
-    animation: 8s rotate linear infinite;
-    cursor: not-allowed;
-    position: relative;
-    overflow: hidden;
+#loadingButton {
+  margin-top: 40px;
+  margin-bottom: 15px;
+  padding: 10px 20px;
+  color: white;
+  border: 1px solid #0000;
+  border-radius: 12px;
+  cursor: not-allowed;
+  position: relative;
+  overflow: hidden;
+  background-color: transparent;
+}
+
+#loadingButton::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, #070707, #00bdff, #0182ff);
+  animation: rotateBackground 8s linear infinite;
+}
+
+#loadingButton::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: 1px;
+  left: 1px;
+  width: calc(100% - 2px);
+  height: calc(100% - 2px);
+  border-radius: 12px;
+  background-color: #131219;
+}
+
+@keyframes rotateBackground {
+  100% {
+    transform: rotate(1turn);
   }
-  @keyframes rotate {
-    to {
-      --angle: 360deg;
-    }
-  }
-  @property --angle {
-    syntax: "<angle>";
-    initial-value: 0deg;
-    inherits: false;
-  }
+}
+
   #contextText {
     max-width: 600px;
     margin-top: 80px;
@@ -107,7 +126,6 @@
 	}
 	html, body {
 		background-color: "#323232";
-	}
   }
 	</style>
 	<link rel='icon' type='image/svg+xml'
