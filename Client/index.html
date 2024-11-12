@@ -169,7 +169,7 @@ button:disabled {
 		script.onload = () => {
 			  const loadingButton = document.getElementById('loadingButton');
 			  if (loadingButton) {
-				loadingButton.textContent = 'Continue';
+				loadingButton.querySelector("span").textContent = 'Continue';
 				loadingButton.disabled = false;
 				loadingButton.style.cursor = 'pointer';
 				loadingButton.addEventListener('click', hideBlackScreen);
