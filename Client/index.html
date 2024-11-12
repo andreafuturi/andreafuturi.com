@@ -133,7 +133,7 @@
       <p>If you click a logo it will change its color.</p>
           <button id="loadingButton" disabled>Loading...</button>
     </div>
-      <p style="padding: 20px; position: absolute; bottom: 30px;  font-size: 12px; font-weight: 200;">Made with DenoJS, React, React Spring and a special animation library I made to animate SVGs.</p>
+      <p style="padding: 20px;  font-size: 12px; font-weight: 200;">Made with DenoJS, React, React Spring and a special animation library I made to animate SVGs.</p>
 
   </div>
 	<script>
@@ -152,7 +152,6 @@
 				loadingButton.textContent = 'Continue';
 				loadingButton.disabled = false;
 				loadingButton.style.cursor = 'pointer';
-				loadingButton.style.animation = 'none';
 				loadingButton.addEventListener('click', hideBlackScreen);
 			  }
 		  };
