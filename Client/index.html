@@ -199,6 +199,9 @@ function animateBackground() {
 		  const blackScreenElement = document.getElementById('blackScreen');
 		  if (blackScreenElement) {
 			 blackScreenElement.style.display = 'none';
+			// Add a new history entry
+			history.pushState(null, null, '#instructions-viewed');
+
 		  }
 		}
 	  
@@ -219,6 +222,15 @@ function animateBackground() {
 			// In case of an error loading a script, also hide the black screen
 			hideBlackScreen();
 		  };
+
+		// Listen for the back button with popstate
+		window.addEventListener('popstate', function (event) {
+		    const blackScreenElement = document.getElementById('blackScreen');
+		    if (blackScreenElement) {
+		        blackScreenElement.style.display = 'flex'; // Show the black screen again
+		    }
+		});
+
 	  </script>
 </body>
 
