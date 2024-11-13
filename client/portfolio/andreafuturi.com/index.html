@@ -225,7 +225,7 @@
           if (blackScreen) {
             blackScreen.style.display = "none";
             const currentPath = window.location.pathname;
-            history.pushState(null, null, `${currentPath.endsWith("/") ? currentPath : currentPath + "/"}pattern`);
+            history.pushState(null, null, `#`);
           }
         }
 
