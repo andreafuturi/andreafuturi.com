@@ -1,0 +1,21 @@
+{
+    "hide-files.files": [
+        "LICENSE",
+        "README.md",
+        "client/grazie.html",
+        "assets/favicon.svg"
+    ],
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "**/.gitignore": true,
+        "LICENSE": true,
+        "README.md": true,
+        "client/grazie.html": true,
+        "assets/favicon.svg": true
+    }
+}
