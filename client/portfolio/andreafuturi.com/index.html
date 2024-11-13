@@ -216,30 +216,45 @@
         const loadingButton = document.getElementById("loadingButton");
 
         function animateBackground() {
-          blackScreen.classList.add("fade-background");
+          if (blackScreen) {
+            blackScreen.classList.add("fade-background");
+          }
         }
+
         function hideBlackScreen() {
-          blackScreen.style.display = "none";
-          history.pushState(null, null, window.location.pathname + "pattern");
+          if (blackScreen) {
+            blackScreen.style.display = "none";
+            const currentPath = window.location.pathname;
+            history.pushState(null, null, `${currentPath.endsWith("/") ? currentPath : currentPath + "/"}pattern`);
+          }
         }
 
         if (loadingButton) {
-          loadingButton.querySelector("span").textContent = "Continue";
+          const buttonText = loadingButton.querySelector("span");
+          if (buttonText) {
+            buttonText.textContent = "Continue";
+          }
           loadingButton.disabled = false;
           loadingButton.style.cursor = "pointer";
           loadingButton.addEventListener("click", hideBlackScreen);
         }
 
         setTimeout(animateBackground, 2000);
+
+        // Check if a module script exists and add an error handler if so
+        const moduleScript = document.querySelector('script[type="module"]');
+        if (moduleScript) {
+          moduleScript.onerror = hideBlackScreen;
+        }
+
+        // Only add popstate event if blackScreen exists
+        window.addEventListener("popstate", () => {
+          if (blackScreen) {
+            blackScreen.style.display = "flex";
+          }
+        });
       }
-
       window.addEventListener("DOMContentLoaded", initializeUI);
-
-      // Detect module script loading status
-      document.querySelector('script[type="module"]').onerror = hideBlackScreen;
-      window.addEventListener("popstate", () => {
-        document.getElementById("blackScreen").style.display = "flex";
-      });
     </script>
   </body>
 </html>
