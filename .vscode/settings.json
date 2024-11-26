@@ -3,7 +3,12 @@
         "LICENSE",
         "README.md",
         "client/grazie.html",
-        "assets/favicon.svg"
+        "node_modules",
+        ".vscode",
+        "package-lock.json",
+        "client/vite.config.js",
+        "server/deno.lock",
+        "server/deno.json"
     ],
     "files.exclude": {
         "**/.git": true,
@@ -16,6 +21,11 @@
         "LICENSE": true,
         "README.md": true,
         "client/grazie.html": true,
-        "assets/favicon.svg": true
+        "node_modules": true,
+        ".vscode": true,
+        "package-lock.json": true,
+        "client/vite.config.js": true,
+        "server/deno.lock": true,
+        "server/deno.json": true
     }
 }

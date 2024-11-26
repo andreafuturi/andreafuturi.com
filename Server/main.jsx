@@ -1,45 +1,26 @@
-import { serve } from "https://deno.land/std/http/server.ts";
-const grazie = await Deno.readTextFile("./client/grazie.html");
-async function handler(_req) {
-  const portfolio = await Deno.readTextFile("./client/portfolio/andreafuturi.com/index.html");
+import { refresh } from "https://deno.land/x/refresh/mod.ts";
+import { parse } from "https://deno.land/std/flags/mod.ts";
+import { render } from "https://esm.sh/preact-render-to-string?deps=preact";
+import App from "../client/index.jsx";
+import { createServerHandler } from "../lib/server-handler.js";
 
-  const { pathname } = new URL(_req.url);
-  //thank you page
-  if (pathname.startsWith("/grazie")) {
-    return new Response(grazie, {
-      headers: {
-        "content-type": "text/html; charset=utf-8",
-      },
-    });
-  }
-  //static favicon
-  if (pathname.endsWith(".svg")) {
-    const file = await Deno.readTextFile("." + pathname);
-    return new Response(file, {
-      headers: {
-        "content-type": "image/svg+xml",
-      },
-    });
-  }
-  //static js
-  if (pathname.endsWith(".js")) {
-    const file = await Deno.readTextFile("." + pathname);
-    return new Response(file, {
-      headers: {
-        "content-type": "application/javascript",
-      },
-    });
-  }
-  try {
-    return new Response(portfolio, {
-      headers: { "content-type": "text/html; charset=utf-8" },
-    });
-  } catch (problem) {
-    return new Response(
-      `<div style='text-align: center;font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;margin-top: 50vh;color: red;'>${problem}<br /><span style="color:#000">${problem.stack}</span></div>`,
-      { headers: { "content-type": "text/html; charset=utf-8" } }
-    );
-  }
-}
+// Parse CLI args
+const args = parse(Deno.args);
+globalThis.dev = args.dev;
 
-serve(handler);
+// Setup configuration -> main app index jsx, dev mode, static files directory,  middleware for dev auto refreshing
+const serverConfig = {
+  RootComponent: App,
+  renderFunction: render,
+  staticAssetsDirectory: "client/",
+  devMiddleware: globalThis.dev ? refresh() : null,
+  routingConfig: {
+    apiEndpointsPath: new URL(".", import.meta.url).pathname + "api",
+    pagesDirectory: new URL(".", import.meta.url).pathname + "../client",
+    isDevelopmentMode: globalThis.dev,
+  },
+};
+
+// Create and start server
+const handler = createServerHandler(serverConfig);
+Deno.serve(handler);
