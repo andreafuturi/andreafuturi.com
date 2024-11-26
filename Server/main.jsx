@@ -60,7 +60,7 @@ async function handler(_req) {
     })
   }
   //static images
-  if (pathname.startsWith("/Assets/Images")) {
+  if (pathname.startsWith("/Assets/Images") || pathname.endsWith(".jpg") || pathname.endsWith(".png")) {
     const file = await Deno.readFile('.'+pathname)
     return new Response(file, {
       headers: {
