@@ -50,7 +50,7 @@ export const inlineImport = withoutHydration(({ src, selfExecute, perInstance = 
     if (typeof src === "function")
       return (
         <script>
-          {src.toString().replaceAll('"', "`")}
+          {src.toString().replaceAll('"', "'")}
           {selfExecute && `${src.name}()`}
         </script>
       );
@@ -60,7 +60,7 @@ export const inlineImport = withoutHydration(({ src, selfExecute, perInstance = 
     if (src.endsWith(".css") || src.endsWith(".js")) {
       try {
         const filePath = Deno.cwd() + relativePath + "/" + src;
-        const content = Deno.readTextFileSync(filePath).replaceAll('"', "`");
+        const content = Deno.readTextFileSync(filePath).replaceAll('"', "'");
         return src.endsWith(".css") ? <style>{content}</style> : <script>{content}</script>;
       } catch (err) {
         console.error(`🚨 Failed to read file ${src}:`, err);

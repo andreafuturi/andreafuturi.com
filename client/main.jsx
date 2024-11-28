@@ -1,11 +1,10 @@
-import { startRouter } from "https://esm.sh/lightweight-router";
-import Counter from "./components/counter.jsx";
-import About from "./about.jsx";
+import { startRouter } from "https://esm.sh/lightweight-router?debug=truee";
 import hydrateInteractiveComponents from "../lib/hydration.jsx";
 
-const interactiveComponents = [Counter, About];
+const interactiveComponents = [];
 
 startRouter({
+  debug: false,
   onRouteChange: currentPath => hydrateInteractiveComponents(document.querySelector(`route[path="${currentPath}"]`), interactiveComponents),
 });
 
