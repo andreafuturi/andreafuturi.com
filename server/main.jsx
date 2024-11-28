@@ -7,6 +7,7 @@ import { createServerHandler } from "../lib/server-handler.js";
 // Parse CLI args
 const args = parse(Deno.args);
 globalThis.dev = args.dev;
+//test
 
 // Setup configuration -> main app index jsx, dev mode, static files directory,  middleware for dev auto refreshing
 const serverConfig = {
