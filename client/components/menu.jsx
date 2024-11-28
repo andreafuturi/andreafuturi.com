@@ -1,9 +1,11 @@
 import { inlineImport } from "../../lib/framework-utils.jsx";
-import homeIcon from "./icons/home.jsx";
-import aboutIcon from "./icons/about.jsx";
-import servicesIcon from "./icons/services.jsx";
-import portfolioIcon from "./icons/portfolio.jsx";
-import myStoryIcon from "./icons/my-story.jsx";
+
+const homeIcon = inlineImport({ src: "./icons/home.svg" });
+const aboutIcon = inlineImport({ src: "./icons/about.svg" });
+const servicesIcon = inlineImport({ src: "./icons/services.svg" });
+const portfolioIcon = inlineImport({ src: "./icons/portfolio.svg" });
+const myStoryIcon = inlineImport({ src: "./icons/my-story.svg" });
+
 function Menu() {
   const currentPath = globalThis.location.pathname;
   const links = [

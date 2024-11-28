@@ -16,6 +16,7 @@ nav {
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 0.5rem;
   }
   a:not(.active) {
     color: var(--fake-white);
@@ -23,7 +24,6 @@ nav {
   svg {
     height: 1.25rem;
     height: auto;
-    padding-bottom: 0.5rem;
   }
   path {
     fill: currentColor;
