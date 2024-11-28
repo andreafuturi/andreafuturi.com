@@ -4,12 +4,12 @@
         "README.md",
         "client/grazie.html",
         ".vscode",
-        "package-lock.json",
         "client/vite.config.js",
         "server/deno.lock",
         "server/deno.json",
         "server",
-        "client/index.html"
+        "client/index.html",
+        ".gitignore"
     ],
     "files.exclude": {
         "**/.git": true,
@@ -23,11 +23,11 @@
         "README.md": true,
         "client/grazie.html": true,
         ".vscode": true,
-        "package-lock.json": true,
         "client/vite.config.js": true,
         "server/deno.lock": true,
         "server/deno.json": true,
         "server": true,
-        "client/index.html": true
+        "client/index.html": true,
+        ".gitignore": true
     }
 }
