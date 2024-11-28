@@ -13,7 +13,7 @@ export default function Index({ children }) {
         <Title>Andrea Futuri</Title>
       </head>
       <body>
-        {logo}
+        <header>{logo}</header>
         <router>
           <route path={globalThis.location.pathname}>{children}</route>
           <route path="/about">

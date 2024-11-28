@@ -1,5 +1,4 @@
-export const worldyLogo = (
-  <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M9.15723 0.657715C13.8484 0.657715 17.6572 4.46656 17.6572 9.15772C17.6572 13.8489 13.8484 17.6577 9.15723 17.6577C4.46608 17.6577 0.657227 13.8489 0.657227 9.15772C0.657227 4.46656 4.46608 0.657715 9.15723 0.657715Z"
       fill="white"
@@ -24,6 +23,3 @@ export const worldyLogo = (
       fill="black"
     />
   </svg>
-);
-
-export default worldyLogo;

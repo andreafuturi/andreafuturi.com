@@ -1,9 +1,9 @@
 import { inlineImport } from "../../lib/framework-utils.jsx";
-import carrefourLogo from "../components/companies/carrefour.jsx";
-import gustirariLogo from "../components/companies/gustirari.jsx";
-import recrowdLogo from "../components/companies/recrowd.jsx";
-import worldyLogo from "../components/companies/worldy.jsx";
 
+const carrefourLogo = inlineImport({ src: "../components/companies/carrefour.svg" });
+const recrowdLogo = inlineImport({ src: "../components/companies/recrowd.svg" });
+const worldyLogo = inlineImport({ src: "../components/companies/worldy.svg" });
+const gustirariLogo = inlineImport({ src: "../components/companies/gustirari.svg" });
 function Home() {
   return (
     <home>
@@ -30,11 +30,11 @@ function Home() {
         </h1>
         <p>Helping startups and founders build the future</p>
       </herotexts>
-      <cta>
+      <companies>
         <small class="center">Trusted by +10 companies</small>
-        <companies>{[carrefourLogo, recrowdLogo, gustirariLogo, worldyLogo]}</companies>
-        <a class="cta">Book a call now</a>
-      </cta>
+        <logos>{[carrefourLogo, recrowdLogo, gustirariLogo, worldyLogo]}</logos>
+      </companies>
+      <a class="cta">Book a call now</a>
       <a class="center scroll-to-about flex-col" href="/about">
         About
         <svg fill="currentColor" width="17" height="11" viewBox="0 0 17 11" xmlns="http://www.w3.org/2000/svg">

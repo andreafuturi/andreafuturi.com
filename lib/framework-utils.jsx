@@ -57,11 +57,15 @@ export const inlineImport = withoutHydration(({ src, selfExecute, perInstance = 
     if (src.startsWith("http")) return <script rel="preconnect" type="module" src={src} />;
 
     // Handle file imports with error handling 🛡️
-    if (src.endsWith(".css") || src.endsWith(".js")) {
+    if (src.endsWith(".css") || src.endsWith(".js") || src.endsWith(".svg")) {
       try {
         const filePath = Deno.cwd() + relativePath + "/" + src;
         const content = Deno.readTextFileSync(filePath).replaceAll('"', "'");
-        return src.endsWith(".css") ? <style>{content}</style> : <script>{content}</script>;
+
+        // Handle different file types 📁
+        if (src.endsWith(".css")) return <style>{content}</style>;
+        if (src.endsWith(".js")) return <script>{content}</script>;
+        if (src.endsWith(".svg")) return <figure dangerouslySetInnerHTML={{ __html: content }} />;
       } catch (err) {
         console.error(`🚨 Failed to read file ${src}:`, err);
         return <ErrorComponent error={`Failed to load resource: ${src}`} />;

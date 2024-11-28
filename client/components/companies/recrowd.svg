@@ -1,5 +1,4 @@
-const recrowdLogo = (
-  <svg width="63" height="17" viewBox="0 0 63 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+ <svg width="63" height="17" viewBox="0 0 63 17" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M0 12.134V7.31556L4.07382 0.356188C4.19029 0.159625 4.44176 0.0932192 4.63765 0.210094L8.47059 2.49978V7.27041L0 12.134Z" fill="#DA3A52" />
     <path
       d="M16.9413 12.134V7.31556L12.8675 0.356188C12.751 0.159625 12.4995 0.0932192 12.3036 0.210094L8.4707 2.49978V7.27041L16.9413 12.134Z"
@@ -38,5 +37,3 @@ const recrowdLogo = (
       fill="#333333"
     />
   </svg>
-);
-export default recrowdLogo;
