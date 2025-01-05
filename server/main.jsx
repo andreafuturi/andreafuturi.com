@@ -23,7 +23,7 @@ async function handler(_req) {
   }
 //static favicon
   if (pathname.endsWith(".jpg")) {
-    const file = await Deno.readTextFile("." + pathname);
+    const file = await Deno.readFile("." + pathname);
     return new Response(file, {
       headers: {
         "content-type": "image/jpeg",
@@ -31,7 +31,7 @@ async function handler(_req) {
     });
   }
 if (pathname.endsWith(".png")) {
-  const file = await Deno.readTextFile("." + pathname);
+  const file = await Deno.readFile("." + pathname);
     return new Response(file, {
       headers: {
         "content-type": "image/png",
@@ -39,7 +39,7 @@ if (pathname.endsWith(".png")) {
     });
 }
 if (pathname.endsWith(".ico")) {
-  const file = await Deno.readTextFile("." + pathname);
+  const file = await Deno.readFile("." + pathname);
     return new Response(file, {
       headers: {
         "content-type": "image/x-icon",
