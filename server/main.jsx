@@ -21,6 +21,33 @@ async function handler(_req) {
       },
     });
   }
+//static favicon
+  if (pathname.endsWith(".jpg")) {
+    const file = await Deno.readTextFile("." + pathname);
+    return new Response(file, {
+      headers: {
+        "content-type": "image/jpeg",
+      },
+    });
+  }
+if (pathname.endsWith(".png")) {
+  const file = await Deno.readTextFile("." + pathname);
+    return new Response(file, {
+      headers: {
+        "content-type": "image/png",
+      },
+    });
+}
+if (pathname.endsWith(".ico")) {
+  const file = await Deno.readTextFile("." + pathname);
+    return new Response(file, {
+      headers: {
+        "content-type": "image/x-icon",
+      },
+    });
+}
+
+
   //static js
   if (pathname.endsWith(".js")) {
     const file = await Deno.readTextFile("." + pathname);
