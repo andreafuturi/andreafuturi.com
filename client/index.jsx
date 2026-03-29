@@ -1,6 +1,4 @@
 import { IndexCss, MainJsx, Title } from "../lib/framework-utils.jsx";
-import About from "./about/about.jsx";
-import Menu from "./components/menu.jsx";
 
 export default function Index({ children }) {
   return (
@@ -12,16 +10,7 @@ export default function Index({ children }) {
         <MainJsx isDev={globalThis.dev} />
         <Title>Andrea Futuri</Title>
       </head>
-      <body>
-        <header>{logo}</header>
-        <router>
-          <route path={globalThis.location.pathname}>{children}</route>
-          <route path="/about">
-            <About />
-          </route>
-        </router>
-        <Menu />
-      </body>
+      <body></body>
     </html>
   );
 }

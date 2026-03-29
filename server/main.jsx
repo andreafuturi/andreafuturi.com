@@ -7,7 +7,6 @@ import { createServerHandler } from "../lib/server-handler.js";
 // Parse CLI args
 const args = parse(Deno.args);
 globalThis.dev = args.dev;
-//test
 
 // Setup configuration -> main app index jsx, dev mode, static files directory,  middleware for dev auto refreshing
 const serverConfig = {
@@ -16,8 +15,8 @@ const serverConfig = {
   staticAssetsDirectory: "client/",
   devMiddleware: globalThis.dev ? refresh() : null,
   routingConfig: {
-    apiEndpointsPath: new URL(".", import.meta.url).pathname + "api",
-    pagesDirectory: new URL(".", import.meta.url).pathname + "../client",
+    apiEndpointsPath: new URL("../server/api", import.meta.url).pathname,
+    pagesDirectory: new URL("../client", import.meta.url).pathname,
     isDevelopmentMode: globalThis.dev,
   },
 };

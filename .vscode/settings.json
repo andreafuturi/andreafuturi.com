@@ -7,16 +7,16 @@
         "client/vite.config.js",
         "server/deno.lock",
         "server/deno.json",
-        "client/index.html",
-        ".gitignore"
+        ".gitignore",
+        "client/index.html"
     ],
     "files.exclude": {
         "**/.git": true,
         "**/.svn": true,
         "**/.hg": true,
-        "**/CVS": true,
         "**/.DS_Store": true,
         "**/Thumbs.db": true,
+        "**/CVS": true,
         "**/.gitignore": true,
         "LICENSE": true,
         "README.md": true,
@@ -25,7 +25,7 @@
         "client/vite.config.js": true,
         "server/deno.lock": true,
         "server/deno.json": true,
-        "client/index.html": true,
-        ".gitignore": true
+        ".gitignore": true,
+        "client/index.html": true
     }
 }

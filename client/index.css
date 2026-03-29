@@ -10,49 +10,11 @@ a {
   color: var(--primary-color);
   text-decoration: none;
 }
-h1 {
-  font-weight: 900;
-  font-size: 28.3571px;
-  line-height: 125.4%;
-  letter-spacing: 0.08em;
-}
-p {
-  font-weight: 300;
-  font-size: 0.875rem;
-  line-height: 1.063rem;
-  letter-spacing: 0.08em;
-}
-.cta {
-  background-color: var(--primary-color);
-  color: #fff;
-  text-transform: uppercase;
-  border: none;
-  padding: 0.6rem;
-  margin: 0 auto;
-  font-weight: 800;
-  font-size: 1.184rem;
-  letter-spacing: 0.09em;
-  cursor: pointer;
-  text-align: center;
-}
-small {
-  font-weight: 100;
-  font-size: 0.627rem;
-  line-height: 110.4%;
-  letter-spacing: 0.08em;
-}
 .logo {
   height: var(--logo-height);
 }
-header {
-  padding: var(--header-padding);
-  margin: 0 clamp(-2rem, -5vw, -1rem);
-  background: linear-gradient(to bottom, rgb(165 165 165), rgba(0, 187, 255, 0));
-}
 static,
-interactive,
-router,
-route {
+interactive {
   display: contents;
 }
 svg {
