@@ -1,36 +1,40 @@
-import { animated } from "react-spring"
-import getMorph from "../../Functions/getMorph.js"
-import transformPath from "../../Functions/transformPath.js"
-import useChildrenAsPaths from "../../Functions/useChildrenAsPaths.js"
-import useChildrenBBox from "../../Functions/useChildrenBBox.js"
+import { animated } from "react-spring";
+import getMorph from "../../Functions/getMorph.js";
+import transformPath from "../../Functions/transformPath.js";
+import useChildrenAsPaths from "../../Functions/useChildrenAsPaths.js";
+import useChildrenBBox from "../../Functions/useChildrenBBox.js";
 
+export function Morph({ from, to, mass, tension, friction }) {
+  if (globalThis.isBrowser) {
+    const froms = useChildrenAsPaths(from);
+    const toes = useChildrenAsPaths(to);
 
-export function Morph({from, to, mass,tension,friction}) {
- 
-  if (window.isBrowser) {
-    const froms = useChildrenAsPaths(from)
-    const toes = useChildrenAsPaths(to)
-
-    return froms.map((from, i) =>
-    <animated.path {...getMorph(from.props.d, toes[i].props.d, false, { mass, tension, friction })} />
-    ) 
+    return froms.map((from, i) => <animated.path {...getMorph(from.props.d, toes[i].props.d, false, { mass, tension, friction })} />);
   } else {
-    return from
+    return from;
   }
 }
 
+const Transform = ({ children, animated, merged = true, ...props }) => {
+  if (children?.type === "use") return children;
+  const paths = useChildrenAsPaths(children);
+  const bbox = useChildrenBBox(paths); //this should be executed only if merged is true
+  const origin = merged ? [bbox.cx, bbox.cy] : undefined;
+  if (animated)
+    return (
+      <AnimatedTransform origin={origin} {...props}>
+        {paths}
+      </AnimatedTransform>
+    );
+  return (
+    <NormalTransform origin={origin} {...props}>
+      {paths}
+    </NormalTransform>
+  );
+};
 
-const Transform = ({children, animated, merged = true, ...props }) => {
-  if (children?.type === "use") return children
-  const paths = useChildrenAsPaths(children)
-  const bbox = useChildrenBBox(paths) //this should be executed only if merged is true
-  const origin = merged ? [ bbox.cx, bbox.cy] : undefined
-  if (animated) return <AnimatedTransform origin={origin} {...props}>{paths}</AnimatedTransform>
-  return <NormalTransform origin={origin} {...props}>{paths}</NormalTransform>
-}
-
-const NormalTransform = ({children,fill,...restProps }) => {
-  return children.map((path) => {
+const NormalTransform = ({ children, fill, ...restProps }) => {
+  return children.map(path => {
     //we get path's data
     const { transformeD, originalD, d, ...pathProps } = path.props;
     const after = transformPath(transformeD || d, { ...restProps });
@@ -40,24 +44,21 @@ const NormalTransform = ({children,fill,...restProps }) => {
       return <animated.path {...getMorph(before, after, false)} />;
     }
     return <path {...pathProps} d={after} />;
-  })
-}
-const AnimatedTransform = ({children,style,reverse, morph, loop, ...restProps }) => {
-  if (window.isBrowser) {
+  });
+};
+const AnimatedTransform = ({ children, style, reverse, morph, loop, ...restProps }) => {
+  if (globalThis.isBrowser) {
     return children.map(path => {
       const { transformeD, originalD, d, ...pathProps } = path.props;
-      const after = transformPath(transformeD|| d, {...restProps})
-      const before = originalD || d
-      return <animated.path {...pathProps} {...getMorph(before, after, morph, {}, loop)} />
-    })
+      const after = transformPath(transformeD || d, { ...restProps });
+      const before = originalD || d;
+      return <animated.path {...pathProps} {...getMorph(before, after, morph, {}, loop)} />;
+    });
   }
-  return reverse ? <NormalTransform {...restProps}>{children}</NormalTransform> : children
-}
+  return reverse ? <NormalTransform {...restProps}>{children}</NormalTransform> : children;
+};
 
-
-
-export default Transform
-
+export default Transform;
 
 /* global transform utile sia per il group che per gli use restituti dalla cache 
 if (globalThis.retroCompatible === false) { 
