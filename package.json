@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "yarn client & yarn server",
-    "server": "deno run --watch --no-check --allow-read --allow-write --allow-net Server/main.jsx",
+    "server": "deno run --allow-run --watch --no-check --allow-read --allow-import --allow-write --allow-net Server/main.jsx",
     "client": "vite Client",
     "preview": "vite preview Client",
     "build": "vite build Client",

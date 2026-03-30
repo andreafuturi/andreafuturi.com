@@ -5,7 +5,7 @@
     "preact/hooks": "https://esm.sh/preact/hooks",
     "preact-render-to-string": "https://esm.sh/preact-render-to-string?deps=preact",
     "svg-path-commander": "https://cdn.jsdelivr.net/npm/svg-path-commander/dist/svg-path-commander.esm.min.js",
-    "mini-svg-data-uri": "https://cdn.skypack.dev/mini-svg-data-uri",
+    "mini-svg-data-uri": "https://esm.sh/mini-svg-data-uri@1.4.4",
     "react-spring": "https://cdn.skypack.dev/react-spring"
   }
 }
