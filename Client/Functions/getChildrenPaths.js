@@ -1,28 +1,25 @@
-// Utility function to convert children into paths
 import { toChildArray } from "preact";
 
+const cache = new WeakMap();
+
 export default function getChildrenPaths(children) {
-  let paths = [];
-  let childArray = toChildArray(children);
+  if (children && typeof children === "object" && cache.has(children))
+    return cache.get(children);
+
+  const paths = [];
+  const childArray = toChildArray(children);
   while (childArray.length > 0) {
     const child = childArray.shift();
-    if (child.type === "path") {
-      paths.push(child);
-    } else if (child.type === "use") {
+    if (child.type === "path" || child.type === "use") {
       paths.push(child);
     } else if (child.type === "g") {
-      childArray = childArray.concat(toChildArray(child.props.children));
-    } else if (
-      typeof child.type === "function" &&
-      child.type.call &&
-      child.props
-    ) {
+      childArray.push(...toChildArray(child.props.children));
+    } else if (typeof child.type === "function" && child.props) {
       if (child.props.d?.animation) paths.push(child);
-      else
-        childArray = childArray.concat(
-          toChildArray(child.type.call(undefined, child.props))
-        );
+      else childArray.push(...toChildArray(child.type.call(undefined, child.props)));
     }
   }
+
+  if (children && typeof children === "object") cache.set(children, paths);
   return paths;
 }

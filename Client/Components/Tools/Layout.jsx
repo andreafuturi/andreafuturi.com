@@ -78,7 +78,7 @@ const Light = props => {
   return (
     <>
       <filter id="HighRelief">
-        <feGaussianBlur in="SourceAlpha" stdDeviation="10000" result="blur" />
+        {/* <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blur" /> */}
         <feDiffuseLighting in="blur" surfaceScale="0.5">
           <fePointLight x={mouseX} y={mouseY} z={z} />
         </feDiffuseLighting>
