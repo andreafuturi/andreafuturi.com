@@ -2,7 +2,7 @@ import { useMemo } from "preact/hooks";
 import { quasiPeriodBehaviour } from "../../Functions/getPeriodic.js";
 import smart from "../../Functions/smart.js";
 import useChildrenAsPaths from "../../Functions/useChildrenAsPaths.js";
-import useChildrenBBox from "../../Functions/useChildrenBBox.js";
+import getChildrenBBox from "../../Functions/getChildrenBBox.js";
 import Transform from "../Tools/Transform.jsx";
 
 const Mirror = ({ children, axis = "y", spacing = 2000, iterations = 4, alternate = true, ...restProps }) => {
@@ -18,7 +18,7 @@ const mirror = useMemo(() => {
 
         //on every other iteration we will calucate dimensions of previous level and therefore how much its flipped copy has to be moved would be cool to that automatically without calculating size
         const levelPaths = useChildrenAsPaths(previousLevel);
-        const levelBBox = useChildrenBBox(levelPaths);
+        const levelBBox = getChildrenBBox(levelPaths);
 
         const x = axis === "x" ? levelBBox.width + spacing : 0;
         const y = axis === "y" ? levelBBox.height + spacing : 0;

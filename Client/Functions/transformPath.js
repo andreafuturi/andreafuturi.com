@@ -1,10 +1,9 @@
-import SVGPathCommander from "svg-path-commander";
+import SVGPathCommander from "../lib/svgPathCommander.js";
 
 SVGPathCommander.options.round = 0;
 export default function transformPath(pathString, transformProps) {
   let pathCommander = "";
   try {
-    pathCommander = new SVGPathCommander(pathString);
     const {
       flipX,
       flipY,
@@ -19,12 +18,17 @@ export default function transformPath(pathString, transformProps) {
       reverse,
     } = transformProps;
 
-    if (flipX) pathCommander.transform({ rotate: [0, 180, 0], origin: origin });
-    if (flipY) pathCommander.transform({ rotate: [180, 0, 0], origin: origin });
-    if (rotate) pathCommander.transform({ rotate, origin: origin });
+    pathCommander = new SVGPathCommander(
+      pathString,
+      Array.isArray(origin) && origin.length >= 2 ? { origin } : {},
+    );
+
+    if (flipX) pathCommander.transform({ rotate: [0, 180, 0], origin });
+    if (flipY) pathCommander.transform({ rotate: [180, 0, 0], origin });
+    if (rotate) pathCommander.transform({ rotate, origin });
     if (scale || scaleX || scaleY)
       pathCommander.transform({
-        origin: origin,
+        origin,
         scale: [scaleX || scale || 1, scaleY || scale || 1],
       });
     if (x || y) pathCommander.transform({ translate: [x, y] });

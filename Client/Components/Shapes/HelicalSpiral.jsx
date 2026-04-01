@@ -3,7 +3,7 @@ import { quasiPeriodBehaviour } from "../../Functions/getPeriodic.js";
 import smart from "../../Functions/smart.js";
 import Transform from "../Tools/Transform.jsx";
 
-const HelicalSpiral = ({ r=70, children, reverse, evenOddHorizontalFlip=true, radiusStep = 500000, angleStep = 20,simmetries, ...restProps }) => {
+const HelicalSpiral = ({ r=70, children, reverse, evenOddHorizontalFlip=true, radiusStep = 500000, angleStep = 20, simmetries = 1, ...restProps }) => {
     const numSteps = Math.floor(360 / angleStep);
     const spiral = useMemo(() => {
       const spirals = [];
@@ -32,7 +32,7 @@ const HelicalSpiral = ({ r=70, children, reverse, evenOddHorizontalFlip=true, ra
         spirals.push(helix);
       }
       return spirals;
-    }, [children, r, angleStep, radiusStep, reverse, evenOddHorizontalFlip]);
+    }, [children, r, angleStep, radiusStep, reverse, evenOddHorizontalFlip, simmetries]);
   return smart(spiral, restProps)
   };
   export default HelicalSpiral;

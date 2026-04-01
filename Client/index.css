@@ -27,6 +27,7 @@
   }
   svg {
 	overflow: hidden !important;
+	fill: var(--blue);
   }
   filter {
 	color-interpolation-filters: sRGB;

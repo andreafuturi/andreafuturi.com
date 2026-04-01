@@ -2,7 +2,7 @@ import { animated } from "react-spring";
 import getMorph from "../../Functions/getMorph.js";
 import transformPath from "../../Functions/transformPath.js";
 import useChildrenAsPaths from "../../Functions/useChildrenAsPaths.js";
-import useChildrenBBox from "../../Functions/useChildrenBBox.js";
+import getChildrenBBox from "../../Functions/getChildrenBBox.js";
 
 export function Morph({ from, to, mass, tension, friction }) {
   if (globalThis.isBrowser) {
@@ -18,7 +18,7 @@ export function Morph({ from, to, mass, tension, friction }) {
 const Transform = ({ children, animated, merged = true, ...props }) => {
   if (children?.type === "use") return children;
   const paths = useChildrenAsPaths(children);
-  const bbox = useChildrenBBox(paths); //this should be executed only if merged is true
+  const bbox = getChildrenBBox(paths); //this should be executed only if merged is true
   const origin = merged ? [bbox.cx, bbox.cy] : undefined;
   if (animated)
     return (

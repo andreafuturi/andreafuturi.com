@@ -1,5 +1,5 @@
 import { useSpring } from "react-spring";
-import SVGPathCommander from "svg-path-commander";
+import SVGPathCommander from "../lib/svgPathCommander.js";
 
 const midPoint = (a, b, t) => {
   const [ax, ay] = a;

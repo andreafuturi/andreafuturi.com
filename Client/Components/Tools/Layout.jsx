@@ -1,27 +1,27 @@
-import useChildrenAsPaths from "../../Functions/useChildrenAsPaths.js";
-import useChildrenBBox from "../../Functions/useChildrenBBox.js";
+import { useEffect, useLayoutEffect, useRef, useState } from "preact/hooks";
+import { inlineImport } from "../../../lib/framework-utils.jsx";
 import getAutoBBox from "../../Functions/getAutoBBox.js";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
+import getChildrenBBox from "../../Functions/getChildrenBBox.js";
+import useChildrenAsPaths from "../../Functions/useChildrenAsPaths.js";
 import { useMousePosition } from "../../Functions/useMousePosition.js";
 //in the future the script tag should be a component that does some compiling optimization to the funcion (and also caching?)
 // implement pan and zoom and automatically filter out paths that are not visible (checking the bounding box of the path with the new modified viewBox)
-function Layout({ children, width, height, m, cover, noimage, frontend, ...attrs }) {
+function Layout({ children, width, height, m, cover, noimage, frontend, withLight = true, ...attrs }) {
   const ref = useRef();
   const [autoWidth, autoHeight] = useDimensions(ref);
   let childrenBBox = { x: 0, y: 0, width: 0, height: 0 };
   if (!globalThis.isBrowser) {
     const childrenPaths = useChildrenAsPaths(children);
-    childrenBBox = useChildrenBBox(childrenPaths);
+    childrenBBox = getChildrenBBox(childrenPaths);
   }
   const image = (
-    <g filter="url(#HighRelief)" transform={`translate(${-childrenBBox.x}, ${-childrenBBox.y})`}>
+    <g filter={withLight ? "url(#HighRelief)" : undefined} transform={`translate(${-childrenBBox.x}, ${-childrenBBox.y})`}>
       {children}
     </g>
   );
 
   return (
     <>
-      <Browser script={getAutoBBox} />
       <svg
         ref={ref}
         viewBox={`0 0 ${autoWidth || childrenBBox.width} ${autoHeight || childrenBBox.height}`}
@@ -35,34 +35,45 @@ function Layout({ children, width, height, m, cover, noimage, frontend, ...attrs
         <Light width={autoWidth || childrenBBox.width} height={autoHeight || childrenBBox.height} />
         {image}
       </svg>
+      {inlineImport({ src: getAutoBBox, selfExecute: true })}
     </>
   );
 }
 
 const Light = props => {
-  const [mouseX, setMouseX] = useState(props.width / 2);
-  const [mouseY, setMouseY] = useState(props.height / 2);
+  const pos = useMousePosition();
   const [z, setZ] = useState(10000);
-  if (globalThis.isBrowser && globalThis.matchMedia("(min-device-width: 960px)").matches) {
-    useMousePosition(
-      {
-        onChange: ({ value }) => {
-          setMouseX((value.x / globalThis.innerWidth) * props.width);
-          setMouseY((value.y / globalThis.innerHeight) * props.height);
-        },
-      },
-      [globalThis.innerWidth, globalThis.innerHeight, props.width, props.height],
-    );
-    useEventListener("wheel", event => {
-      if (event.deltaY < 0) {
-        setZ(prevZ => prevZ + 2000);
-      } else {
-        setZ(prevZ => prevZ - 2000);
-      }
-    });
-  } else {
-    setZ(15000);
-  }
+  const isDesktopRef = useRef(true);
+
+  const isDesktop =
+    globalThis.isBrowser &&
+    globalThis.matchMedia("(min-device-width: 960px)").matches;
+  isDesktopRef.current = isDesktop;
+
+  useEffect(() => {
+    if (!globalThis.isBrowser) return;
+    const mq = globalThis.matchMedia("(min-device-width: 960px)");
+    const syncZ = () => setZ(mq.matches ? 10000 : 15000);
+    syncZ();
+    mq.addEventListener("change", syncZ);
+    return () => mq.removeEventListener("change", syncZ);
+  }, []);
+
+  useEventListener("wheel", event => {
+    if (!isDesktopRef.current) return;
+    if (event.deltaY < 0) {
+      setZ(prevZ => prevZ + 2000);
+    } else {
+      setZ(prevZ => prevZ - 2000);
+    }
+  });
+
+  const iw = globalThis.innerWidth || 1;
+  const ih = globalThis.innerHeight || 1;
+  const w = props.width ?? 0;
+  const h = props.height ?? 0;
+  const mouseX = isDesktop ? (pos.x / iw) * w : w / 2;
+  const mouseY = isDesktop ? (pos.y / ih) * h : h / 2;
 
   return (
     <>
@@ -84,15 +95,6 @@ const Light = props => {
     </>
   );
 };
-function Browser({ script }) {
-  //should check if the script is already loaded in the browser or just make sure has unique name
-  return globalThis.isBrowser ? (
-    <script>
-      {script.toString()}
-      {`${script.name}()`}
-    </script>
-  ) : null;
-}
 
 function useDimensions(ref) {
   const [autoWidth, setWidth] = useState();
@@ -110,31 +112,22 @@ export default Layout;
 //const onload = globalThis.isBrowser ? {} : {onload: 'getAutoBBox(evt)'}
 
 // Hook
-function useEventListener(eventName, handler, element = window) {
-  // Create a ref that stores handler
+/** No `= window` default — that runs during SSR (Deno) where `window` is undefined. */
+function useEventListener(eventName, handler, element) {
   const savedHandler = useRef();
-  // Update ref.current value if handler changes.
-  // This allows our effect below to always get latest handler ...
-  // ... without us needing to pass it in effect deps array ...
-  // ... and potentially cause effect to re-run every render.
   useEffect(() => {
     savedHandler.current = handler;
   }, [handler]);
   useEffect(
     () => {
-      // Make sure element supports addEventListener
-      // On
-      const isSupported = element && element.addEventListener;
-      if (!isSupported) return;
-      // Create event listener that calls handler function stored in ref
+      const target = element ?? (typeof window !== "undefined" ? window : undefined);
+      if (!target?.addEventListener) return;
       const eventListener = event => savedHandler.current(event);
-      // Add event listener
-      element.addEventListener(eventName, eventListener);
-      // Remove event listener on cleanup
+      target.addEventListener(eventName, eventListener);
       return () => {
-        element.removeEventListener(eventName, eventListener);
+        target.removeEventListener(eventName, eventListener);
       };
     },
-    [eventName, element], // Re-run if eventName or element changes
+    [eventName, element],
   );
 }

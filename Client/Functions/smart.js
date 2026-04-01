@@ -1,22 +1,10 @@
-import Cached from "../Components/Tools/Cached.jsx";
-import Merge from "../Components/Tools/Merge.jsx";
-import Transform from "../Components/Tools/Transform.jsx";
+import Cached from "../components/Tools/Cached.jsx";
+import Merge from "../components/Tools/Merge.jsx";
+import Transform from "../components/Tools/Transform.jsx";
 
 export default function smart(children, props) {
   let result = children;
-  const {
-    x,
-    y,
-    flipX,
-    flipY,
-    rotate,
-    scale,
-    optimize,
-    fill,
-    animated,
-    loop,
-    morph,
-  } = props;
+  const { x, y, flipX, flipY, rotate, scale, optimize, fill, animated, loop, morph } = props;
   const { id, render, general } = props;
   const transformProps = {
     x,
@@ -34,7 +22,6 @@ export default function smart(children, props) {
   const cacheProps = { id, render, general };
   result = Transform({ children: result, ...transformProps });
   result = Cached(result, cacheProps);
-  if (props.merged)
-    result = Merge({ children: result, dataURI: render === "dataURI" });
+  if (props.merged) result = Merge({ children: result, dataURI: render === "dataURI" });
   return result;
 }

@@ -1,13 +1,13 @@
 import { useMemo } from 'preact/hooks'
 import { getLogoRatio, quasiPeriodBehaviour } from '../../Functions/getPeriodic.js'
 import useChildrenAsPaths from '../../Functions/useChildrenAsPaths.js'
-import useChildrenBBox from '../../Functions/useChildrenBBox.js'
+import getChildrenBBox from '../../Functions/getChildrenBBox.js'
 import smart from '../../Functions/smart.js'
 import Transform from '../Tools/Transform.jsx'
 
 const Grid = ({ scaledPattern,width, height, spacing = 0, vSpacing = spacing, hSpacing = spacing, children, onlyLogo, halfWidth = true, evenOddVerticalFlip = true ,evenOddHorizontalFlip, ...restProps}) => {
   const childrenPaths = useChildrenAsPaths(children)
-  const childrenBBox = useChildrenBBox(childrenPaths)
+  const childrenBBox = getChildrenBBox(childrenPaths)
   if (onlyLogo) {
     height = 5 
     width = 9 

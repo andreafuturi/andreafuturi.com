@@ -1,109 +1,26 @@
-import { render as renderSSR } from "https://esm.sh/preact-render-to-string?deps=preact";
-import { serve } from "https://deno.land/std/http/server.ts";
 import { refresh } from "https://deno.land/x/refresh/mod.ts";
-import { getNetworkAddr } from "https://deno.land/x/local_ip/mod.ts";
+import { parse } from "https://deno.land/std/flags/mod.ts";
+import { renderToStringAsync as render } from "https://esm.sh/preact-render-to-string?deps=preact";
+import App from "../client/index.jsx";
+import { createServerHandler } from "../lib/server-handler.js";
 
-import Home from "../Client/index.jsx";
+// Parse CLI args
+const args = parse(Deno.args);
+globalThis.dev = args.dev;
 
-// Create refresh middleware
-const middleware = refresh();
-const index = await Deno.readTextFile("./Client/index.html");
-const grazie = await Deno.readTextFile("./Client/grazie.html");
-async function handler(_req) {
-  const { pathname } = new URL(_req.url);
+// Setup configuration -> main app index jsx, dev mode, static files directory,  middleware for dev auto refreshing
+const serverConfig = {
+  RootComponent: App,
+  renderFunction: render,
+  staticAssetsDirectory: "client/",
+  devMiddleware: globalThis.dev ? refresh() : null,
+  routingConfig: {
+    apiEndpointsPath: new URL(".", import.meta.url).pathname + "api",
+    pagesDirectory: new URL(".", import.meta.url).pathname + "../client",
+    isDevelopmentMode: globalThis.dev,
+  },
+};
 
-  //static svg
-  if (pathname.startsWith("/Cache/")) {
-    const file = await Deno.readTextFile("." + pathname);
-    return new Response(file, {
-      headers: {
-        "content-type": "image/svg+xml",
-      },
-    });
-  }
-  //thank you page
-  if (pathname.startsWith("/grazie")) {
-    return new Response(grazie, {
-      headers: {
-        "content-type": "text/html; charset=utf-8",
-      },
-    });
-  }
-  //static favicon
-  if (pathname.endsWith(".svg")) {
-    const file = await Deno.readTextFile("." + pathname);
-    return new Response(file, {
-      headers: {
-        "content-type": "image/svg+xml",
-      },
-    });
-  }
-  //static pdf
-  if (pathname.startsWith("/Assets/pdf")) {
-    const file = await Deno.readTextFile("." + pathname);
-    return new Response(file, {
-      headers: {
-        "content-type": "application/pdf",
-      },
-    });
-  }
-  //static js
-  if (pathname.startsWith("/Assets/Scripts")) {
-    const file = await Deno.readTextFile("." + pathname);
-    return new Response(file, {
-      headers: {
-        "content-type": "application/javascript",
-      },
-    });
-  }
-  //static images
-  if (pathname.startsWith("/Assets/Images") || pathname.endsWith(".jpg") || pathname.endsWith(".png")) {
-    const file = await Deno.readFile("." + pathname);
-    return new Response(file, {
-      headers: {
-        "content-type": "image/jpeg",
-      },
-    });
-  }
-  //static fonts
-  if (pathname.startsWith("/Assets/Fonts")) {
-    const file = await Deno.readFile("." + pathname);
-    return new Response(file, {
-      headers: {
-        "content-type": "font-src",
-      },
-    });
-  }
-
-  //fast refresh
-  const res = middleware(_req);
-  if (res) return res;
-  //reply
-
-  try {
-    const ip = await getNetworkAddr();
-    const ssrRender = globalThis.ssr ? renderSSR(<Home />) : "";
-    let html = "";
-
-    //switch between dev and prod
-    if (globalThis.prod) {
-      html = index.replace(`<div id="app">`, `<div id="app">${ssrRender}`).replace(`./index.jsx`, `/Assets/Scripts/index.js`);
-    } else {
-      const index = await Deno.readTextFile("./Client/index.html"); //in dev mode index html is loaded at each request
-      html = index.replace(`<div id="app">`, `<div id="app">${ssrRender}`).replace(`./index.jsx`, `http://${ip || "localhost"}:3000/index.jsx`);
-    }
-
-    return new Response(html, {
-      headers: { "content-type": "text/html; charset=utf-8" },
-    });
-  } catch (problem) {
-    return new Response(
-      `<div style='text-align: center;font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;margin-top: 50vh;color: red;'>${problem}<br /><span style="color:#000">${problem.stack}</span></div>`,
-      { headers: { "content-type": "text/html; charset=utf-8" } },
-    );
-  }
-}
-
-serve(handler);
-
-//when in prod mode it would be nice if yarn build is run everytime so save a file (maybe we can use denon for that?)
+// Create and start server
+export const handler = createServerHandler(serverConfig);
+Deno.serve(handler);
