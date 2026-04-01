@@ -1,6 +1,6 @@
 import Transform from './Transform.jsx'
-import {quasiPeriodBehaviour} from '../../Functions/getPeriodic.js'
-import getSize from '../../Functions/getSize.js'
+import {quasiPeriodBehaviour} from '../../functions/getPeriodic.js'
+import getSize from '../../functions/getSize.js'
 
 function Sierpinski({iterations = 7 , vSpacing=1,hSpacing=1,...props}, children) { //flipX and flipY?
   const childSize = getSize(() => children) //bisogna capire se ha senso usare il figlio o bisogna usare atom in generale

@@ -1,7 +1,7 @@
 // Utility function to convert children into paths
 import { toChildArray } from "preact";
 
-export default function useChildrenAsPaths(children) {
+export default function getChildrenPaths(children) {
   let paths = [];
   let childArray = toChildArray(children);
   while (childArray.length > 0) {

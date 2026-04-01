@@ -1,5 +1,5 @@
 import SVGPathCommander from "../lib/svgPathCommander.js";
-import Merge from "../components/Tools/Merge.jsx";
+import Merge from "../components/tools/Merge.jsx";
 
 export default function getSize(of) {
   const lastSetting = globalThis.retroCompatible;

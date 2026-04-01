@@ -1,9 +1,9 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "preact/hooks";
 import { inlineImport } from "../../../lib/framework-utils.jsx";
-import getAutoBBox from "../../Functions/getAutoBBox.js";
-import getChildrenBBox from "../../Functions/getChildrenBBox.js";
-import useChildrenAsPaths from "../../Functions/useChildrenAsPaths.js";
-import { useMousePosition } from "../../Functions/useMousePosition.js";
+import getAutoBBox from "../../functions/getAutoBBox.js";
+import getChildrenBBox from "../../functions/getChildrenBBox.js";
+import getChildrenPaths from "../../functions/getChildrenPaths.js";
+import { useMousePosition } from "../../functions/useMousePosition.js";
 //in the future the script tag should be a component that does some compiling optimization to the funcion (and also caching?)
 // implement pan and zoom and automatically filter out paths that are not visible (checking the bounding box of the path with the new modified viewBox)
 function Layout({ children, width, height, m, cover, noimage, frontend, withLight = true, ...attrs }) {
@@ -11,7 +11,7 @@ function Layout({ children, width, height, m, cover, noimage, frontend, withLigh
   const [autoWidth, autoHeight] = useDimensions(ref);
   let childrenBBox = { x: 0, y: 0, width: 0, height: 0 };
   if (!globalThis.isBrowser) {
-    const childrenPaths = useChildrenAsPaths(children);
+    const childrenPaths = getChildrenPaths(children);
     childrenBBox = getChildrenBBox(childrenPaths);
   }
   const image = (

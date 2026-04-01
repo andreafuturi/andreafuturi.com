@@ -1,6 +1,6 @@
-import Cached from "../components/Tools/Cached.jsx";
-import Merge from "../components/Tools/Merge.jsx";
-import Transform from "../components/Tools/Transform.jsx";
+import Cached from "../components/tools/Cached.jsx";
+import Merge from "../components/tools/Merge.jsx";
+import Transform from "../components/tools/Transform.jsx";
 
 export default function smart(children, props) {
   let result = children;

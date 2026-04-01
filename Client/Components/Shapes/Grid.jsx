@@ -1,12 +1,11 @@
-import { useMemo } from 'preact/hooks'
-import { getLogoRatio, quasiPeriodBehaviour } from '../../Functions/getPeriodic.js'
-import useChildrenAsPaths from '../../Functions/useChildrenAsPaths.js'
-import getChildrenBBox from '../../Functions/getChildrenBBox.js'
-import smart from '../../Functions/smart.js'
-import Transform from '../Tools/Transform.jsx'
+import { getLogoRatio, quasiPeriodBehaviour } from '../../functions/getPeriodic.js'
+import getChildrenPaths from '../../functions/getChildrenPaths.js'
+import getChildrenBBox from '../../functions/getChildrenBBox.js'
+import smart from '../../functions/smart.js'
+import Transform from '../tools/Transform.jsx'
 
 const Grid = ({ scaledPattern,width, height, spacing = 0, vSpacing = spacing, hSpacing = spacing, children, onlyLogo, halfWidth = true, evenOddVerticalFlip = true ,evenOddHorizontalFlip, ...restProps}) => {
-  const childrenPaths = useChildrenAsPaths(children)
+  const childrenPaths = getChildrenPaths(children)
   const childrenBBox = getChildrenBBox(childrenPaths)
   if (onlyLogo) {
     height = 5 
@@ -14,11 +13,10 @@ const Grid = ({ scaledPattern,width, height, spacing = 0, vSpacing = spacing, hS
     halfWidth = true
     vSpacing = getLogoRatio(spacing) * 2
   }
-  const grid = useMemo(() => {
       const logoPositions = [4, 12, 13, 14, 20, 21, 23, 24, 28, 29, 30, 33, 34, 36, 37, 39, 40, 43, 44];
       const positions = onlyLogo ? logoPositions : Array.from({ length: width * height }, (_, i) => i);
 
-      return positions.map(i => {
+      const grid = positions.map(i => {
           return (<Transform
           merged={false}
           scale={scaledPattern ? quasiPeriodBehaviour(i) ? 0.5 : 1 : undefined}
@@ -33,7 +31,6 @@ const Grid = ({ scaledPattern,width, height, spacing = 0, vSpacing = spacing, hS
               </Transform>
           );
       });
-  }, [childrenPaths, height, hSpacing, onlyLogo, width, vSpacing, evenOddVerticalFlip, halfWidth])
   return smart(grid, restProps)
 }
 

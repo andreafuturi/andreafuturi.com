@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from "preact/hooks";
-import useChildrenAsPaths from "../../Functions/useChildrenAsPaths.js";
+import { useEffect, useState } from "preact/hooks";
+import getChildrenPaths from "../../functions/getChildrenPaths.js";
 import miniSvgDataUri from "mini-svg-data-uri";
-import rendering from "../../Functions/rendering.js";
+import rendering from "../../functions/rendering.js";
 //newProps se non specificate dovrebbero essere prese in automatcio mergando le props dei figli
 
 const Merge = ({ children, dataURI, ...rest }) => {
@@ -10,20 +10,14 @@ const Merge = ({ children, dataURI, ...rest }) => {
   }, [children]);
 
   const [childrenPaths, setChildrenPaths] = useState(children);
-  const paths = useChildrenAsPaths(childrenPaths);
+  const paths = getChildrenPaths(childrenPaths);
   if (dataURI) {
     const render = rendering(childrenPaths, "c");
     return <use href={miniSvgDataUri(render) + "#c"} {...rest} />;
   }
-  const before = useMemo(
-    () =>
-      paths
-        .map(path => {
-          return path.props.originalD || path.props.d;
-        })
-        .join(""),
-    [paths],
-  );
+  const before = paths
+    .map(path => path.props.originalD || path.props.d)
+    .join("");
   return (
     <path d={before} {...rest}>
       {paths.map((child, index) => child.props.children)}

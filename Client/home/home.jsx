@@ -1,8 +1,8 @@
-import Layout from "../components/Tools/Layout.jsx";
-import Grid from "../components/Shapes/Grid.jsx";
-import Transform from "../components/Tools/Transform.jsx";
+import Layout from "../components/tools/Layout.jsx";
+import Grid from "../components/shapes/Grid.jsx";
+import Transform from "../components/tools/Transform.jsx";
 import withHydration from "../../lib/withHydration.jsx";
-import HelicalSpiral from "../components/Shapes/HelicalSpiral.jsx";
+import HelicalSpiral from "../components/shapes/HelicalSpiral.jsx";
 globalThis.retroCompatible = false;
 
 //if component doens't have children render logo
@@ -10,11 +10,8 @@ globalThis.retroCompatible = false;
 function Home() {
   const logo = <path d="M4640 8517L6187 10645H9281L6187 6387L7734 4259L12375 10646H15469L7734 0L0 10645H3094L4640 8517Z" />;
   return (
-    <Layout cover withLight={false}>
-      {/* {logo} */}
-     
-
-      {/* <Grid width={20} height={10} spacing={10000}>
+    <Layout cover withLight={true}>
+      <Grid width={20} height={10} spacing={10000}>
         <Transform x={-9000} animated loop>
           {logo}
         </Transform>
@@ -23,7 +20,7 @@ function Home() {
             {logo}
           </Transform>
         </Transform>
-      </Grid> */}
+      </Grid>
     </Layout>
   );
 }

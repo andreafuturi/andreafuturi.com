@@ -1,13 +1,13 @@
 import { animated } from "react-spring";
-import getMorph from "../../Functions/getMorph.js";
-import transformPath from "../../Functions/transformPath.js";
-import useChildrenAsPaths from "../../Functions/useChildrenAsPaths.js";
-import getChildrenBBox from "../../Functions/getChildrenBBox.js";
+import getMorph from "../../functions/getMorph.js";
+import transformPath from "../../functions/transformPath.js";
+import getChildrenPaths from "../../functions/getChildrenPaths.js";
+import getChildrenBBox from "../../functions/getChildrenBBox.js";
 
 export function Morph({ from, to, mass, tension, friction }) {
   if (globalThis.isBrowser) {
-    const froms = useChildrenAsPaths(from);
-    const toes = useChildrenAsPaths(to);
+    const froms = getChildrenPaths(from);
+    const toes = getChildrenPaths(to);
 
     return froms.map((from, i) => <animated.path {...getMorph(from.props.d, toes[i].props.d, false, { mass, tension, friction })} />);
   } else {
@@ -17,7 +17,7 @@ export function Morph({ from, to, mass, tension, friction }) {
 
 const Transform = ({ children, animated, merged = true, ...props }) => {
   if (children?.type === "use") return children;
-  const paths = useChildrenAsPaths(children);
+  const paths = getChildrenPaths(children);
   const bbox = getChildrenBBox(paths); //this should be executed only if merged is true
   const origin = merged ? [bbox.cx, bbox.cy] : undefined;
   if (animated)

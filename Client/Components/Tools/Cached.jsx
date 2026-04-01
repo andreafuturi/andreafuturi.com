@@ -1,7 +1,7 @@
 import miniSvgDataUri from 'mini-svg-data-uri'
 import { render as renderSSR } from 'preact-render-to-string'
-import { useEffect, useMemo, useState } from 'preact/hooks'
-import rendering from '../../Functions/rendering.js'
+import { useEffect, useState } from 'preact/hooks'
+import rendering from '../../functions/rendering.js'
 
 //SERVER ONLY CACHE inline=true : component will be cached in a server file, the file will be read on each request and the content will be directly served to the client (with DATA Uri) [no extra request for client, can be eited on client side for realt time edits]
 //se {{inline=false}} and useDataURI = false the component will be cached both server side and broswer side (se inline true è fatto bene con svg4everybody dovrebbe comunque essere cachato sia lato server che client)
@@ -71,15 +71,12 @@ function Static({ children }) {
 }
 function extractPathsFromCache(html) {
   // use regex to match all path elements in the html
-  return useMemo(() => {
-    const regex = /<path[^>]*>/g;
-    const pathElements = [...html.matchAll(regex)];
-    return pathElements.map((element, i) => {
-      // extract properties from the element string
-      const properties = extractProperties(element);
-      return <path {...properties} />;
-    });
-  }, [html]);
+  const regex = /<path[^>]*>/g;
+  const pathElements = [...html.matchAll(regex)];
+  return pathElements.map((element, i) => {
+    const properties = extractProperties(element);
+    return <path {...properties} />;
+  });
 }
 function extractProperties(element) {
   const properties = {};

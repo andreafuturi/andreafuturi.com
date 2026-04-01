@@ -1,7 +1,7 @@
 import SVGPathCommander from "../lib/svgPathCommander.js";
-import getMagicRatio from "../Functions/getMagicRatio.js";
-import Grid from "./Tools/Grid.js";
-import { Transform } from "./Tools/Transform.jsx";
+import getMagicRatio from "../functions/getMagicRatio.js";
+import Grid from "./tools/Grid.js";
+import { Transform } from "./tools/Transform.jsx";
 const logoWidth = 1607.6,
   logoHeight = getMagicRatio(logoWidth);
 const s = logoWidth / 10;
