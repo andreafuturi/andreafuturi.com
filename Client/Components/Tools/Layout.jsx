@@ -3,11 +3,11 @@ import { inlineImport } from "../../../lib/framework-utils.jsx";
 import getAutoBBox from "../../functions/getAutoBBox.js";
 import getChildrenBBox from "../../functions/getChildrenBBox.js";
 import getChildrenPaths from "../../functions/getChildrenPaths.js";
-import { useMousePosition } from "../../functions/useMousePosition.js";
 //in the future the script tag should be a component that does some compiling optimization to the funcion (and also caching?)
 // implement pan and zoom and automatically filter out paths that are not visible (checking the bounding box of the path with the new modified viewBox)
 function Layout({ children, width, height, m, cover, noimage, frontend, withLight = true, ...attrs }) {
   const ref = useRef();
+  const filteredContentRef = useRef();
   const [autoWidth, autoHeight] = useDimensions(ref);
   let childrenBBox = { x: 0, y: 0, width: 0, height: 0 };
   if (!globalThis.isBrowser) {
@@ -15,7 +15,10 @@ function Layout({ children, width, height, m, cover, noimage, frontend, withLigh
     childrenBBox = getChildrenBBox(childrenPaths);
   }
   const image = (
-    <g filter={withLight ? "url(#HighRelief)" : undefined} transform={`translate(${-childrenBBox.x}, ${-childrenBBox.y})`}>
+    <g
+      ref={filteredContentRef}
+      filter={withLight ? "url(#HighRelief)" : undefined}
+      transform={`translate(${-childrenBBox.x}, ${-childrenBBox.y})`}>
       {children}
     </g>
   );
@@ -32,7 +35,11 @@ function Layout({ children, width, height, m, cover, noimage, frontend, withLigh
         preserveAspectRatio={cover ? "xMidYMid slice" : undefined}
         {...attrs}>
         <rect height={"100%"} width="100%" fill="#323232" filter="url(#LowRelief)" />
-        <Light width={autoWidth || childrenBBox.width} height={autoHeight || childrenBBox.height} />
+        <Light
+          lightSpaceRef={filteredContentRef}
+          width={autoWidth || childrenBBox.width}
+          height={autoHeight || childrenBBox.height}
+        />
         {image}
       </svg>
       {inlineImport({ src: getAutoBBox, selfExecute: true })}
@@ -40,10 +47,13 @@ function Layout({ children, width, height, m, cover, noimage, frontend, withLigh
   );
 }
 
-const Light = props => {
-  const pos = useMousePosition();
-  const [z, setZ] = useState(10000);
+const Light = ({ lightSpaceRef, ...props }) => {
   const isDesktopRef = useRef(true);
+  const [lightPos, setLightPos] = useState(() => ({
+    x: (props.width ?? 0) / 2,
+    y: (props.height ?? 0) / 2,
+    z: 10000,
+  }));
 
   const isDesktop =
     globalThis.isBrowser &&
@@ -53,27 +63,40 @@ const Light = props => {
   useEffect(() => {
     if (!globalThis.isBrowser) return;
     const mq = globalThis.matchMedia("(min-device-width: 960px)");
-    const syncZ = () => setZ(mq.matches ? 10000 : 15000);
-    syncZ();
-    mq.addEventListener("change", syncZ);
-    return () => mq.removeEventListener("change", syncZ);
+    const check = () => setLightPos(p => ({ ...p, z: mq.matches ? 10000 : 15000 }));
+    check();
+    mq.addEventListener("change", check);
+    return () => mq.removeEventListener("change", check);
+  }, []);
+
+  useEffect(() => {
+    if (!globalThis.isBrowser) return;
+    const handleMove = e => {
+      const el = lightSpaceRef.current;
+      const root = el?.ownerSVGElement;
+      if (!el || !root?.createSVGPoint) return;
+      const ctm = el.getScreenCTM();
+      if (!ctm) return;
+      const pt = root.createSVGPoint();
+      pt.x = e.clientX;
+      pt.y = e.clientY;
+      const p = pt.matrixTransform(ctm.inverse());
+      setLightPos(prev => ({ ...prev, x: p.x, y: p.y }));
+    };
+    globalThis.addEventListener("mousemove", handleMove);
+    return () => globalThis.removeEventListener("mousemove", handleMove);
   }, []);
 
   useEventListener("wheel", event => {
     if (!isDesktopRef.current) return;
     if (event.deltaY < 0) {
-      setZ(prevZ => prevZ + 2000);
+      setLightPos(p => ({ ...p, z: Math.min(p.z + 2000, 30000) }));
     } else {
-      setZ(prevZ => prevZ - 2000);
+      setLightPos(p => ({ ...p, z: Math.max(p.z - 2000, 1000) }));
     }
   });
 
-  const iw = globalThis.innerWidth || 1;
-  const ih = globalThis.innerHeight || 1;
-  const w = props.width ?? 0;
-  const h = props.height ?? 0;
-  const mouseX = isDesktop ? (pos.x / iw) * w : w / 2;
-  const mouseY = isDesktop ? (pos.y / ih) * h : h / 2;
+  const { x: mouseX, y: mouseY, z } = lightPos;
 
   return (
     <>

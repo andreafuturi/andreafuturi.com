@@ -1,11 +1,11 @@
 import SVGPathCommander from "../lib/svgPathCommander.js";
 import getMagicRatio from "../functions/getMagicRatio.js";
-import Grid from "./tools/Grid.js";
-import { Transform } from "./tools/Transform.jsx";
+import Grid from "./shapes/Grid.jsx";
+import Transform from "./tools/Transform.jsx";
 const logoWidth = 1607.6,
   logoHeight = getMagicRatio(logoWidth);
 const s = logoWidth / 10;
-function Atom({ width, atoms, fill, x, y, cx, cy, filled, spacing = 1, ...props } = {}, ...children) {
+function Atom({ children, width, atoms, fill, x, y, cx, cy, filled, spacing = 1}) {
   const logoX = x !== undefined ? x + logoWidth : logoWidth / 2 + (cx || 0);
   const logoY = y ?? logoHeight / 2 + (cy || 0);
   const logoPoints = new SVGPathCommander(
@@ -17,23 +17,26 @@ function Atom({ width, atoms, fill, x, y, cx, cy, filled, spacing = 1, ...props 
 
   const path =
     children.length > 0 ? (
-      Transform(
-        { x: -logoWidth * 0.2 * 2, y: -logoHeight * 0.2 * 2 },
-        Grid(
-          {
-            width: 9,
-            height: 5,
-            hSpacing: logoWidth * 0.1 * spacing,
-            vSpacing: logoHeight * 0.2 * spacing,
-            only: [5, 9, 10, 13, 14, 17, 18, 19, 20, 21, 22, 25, 27, 28, 33, 34, 39, 40, 45],
-          },
-          Transform({ size: 0.2, mirrorHor: true }, children),
-        ),
-      )
+      <Transform
+        x={ -logoWidth * 0.2 * 2}
+        y={ -logoHeight * 0.2 * 2}
+      >
+        <Grid
+          width={9}
+          height={5}
+          hSpacing={logoWidth * 0.1 * spacing}
+          vSpacing={logoHeight * 0.2 * spacing}
+          only={[5, 9, 10, 13, 14, 17, 18, 19, 20, 21, 22, 25, 27, 28, 33, 34, 39, 40, 45]}
+        >
+          <Transform scale={0.2} merged={true} flipX={true}>
+            {children}
+          </Transform>
+        </Grid>
+      </Transform>
     ) : (
       <path fill={fill} d={(filled ? logoPointsfilled : logoPoints).toString()} />
     );
-  return Object.keys(props).length !== 0 ? Transform(props, path) : path;
+  return Object.keys(props).length !== 0 ? <Transform {...props}>{path}</Transform> : path;
 }
 export default Atom;
 
