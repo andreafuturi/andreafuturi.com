@@ -12,15 +12,16 @@ const HelicalSpiral = ({ r=70, children, reverse, evenOddHorizontalFlip=true, ra
         const rCurrent = r + i * radiusStep;
         const x = rCurrent * Math.cos(i * angleStep * Math.PI / 180 + offset);
         const y = rCurrent * Math.sin(i * angleStep * Math.PI / 180 + offset);
+        const rotate = (i * angleStep) % 360;
         if (reverse) {
           helix.push(
-            <Transform fill="gold" x={-x} y={-y}  flipX={quasiPeriodBehaviour(i)} flipY={i % 2 === 1 && evenOddHorizontalFlip} scale={i * 2.5}>
+            <Transform fill="gold" x={-x} y={-y} rotate={rotate} flipX={quasiPeriodBehaviour(i)} flipY={i % 2 === 1 && evenOddHorizontalFlip} scale={i * 2.5}>
               {children}
             </Transform>
           );
         } else {
           helix.push(
-            <Transform fill="gold" x={x} y={y} flipX={quasiPeriodBehaviour(i)} flipY={i % 2 === 1 && evenOddHorizontalFlip} scale={-i * 2.5}>
+            <Transform fill="gold" x={x} y={y} rotate={-rotate} flipX={quasiPeriodBehaviour(i)} flipY={i % 2 === 1 && evenOddHorizontalFlip} scale={-i * 2.5}>
               {children}
             </Transform>
           );
