@@ -5,7 +5,7 @@ import getChildrenBBox from "../../functions/getChildrenBBox.js";
 import getChildrenPaths from "../../functions/getChildrenPaths.js";
 //in the future the script tag should be a component that does some compiling optimization to the funcion (and also caching?)
 // implement pan and zoom and automatically filter out paths that are not visible (checking the bounding box of the path with the new modified viewBox)
-function Layout({ children, width, height, m, cover, noimage, frontend, withLight = true, ...attrs }) {
+function Layout({ children, viewBoxWidth, viewBoxHeight, width, height, m, cover, noimage, frontend, withLight = true, ...attrs }) {
   const ref = useRef();
   const filteredContentRef = useRef();
   const [autoWidth, autoHeight] = useDimensions(ref);
@@ -13,6 +13,7 @@ function Layout({ children, width, height, m, cover, noimage, frontend, withLigh
   if (!globalThis.isBrowser) {
     const childrenPaths = getChildrenPaths(children);
     childrenBBox = getChildrenBBox(childrenPaths);
+    
   }
   const image = (
     <g
@@ -22,12 +23,13 @@ function Layout({ children, width, height, m, cover, noimage, frontend, withLigh
       {children}
     </g>
   );
+  const viewBox = viewBoxWidth && viewBoxHeight ? `0 0 ${viewBoxWidth} ${viewBoxHeight}` : `0 0 ${autoWidth || childrenBBox.width} ${autoHeight || childrenBBox.height}`;
 
   return (
     <>
       <svg
         ref={ref}
-        viewBox={`0 0 ${autoWidth || childrenBBox.width} ${autoHeight || childrenBBox.height}`}
+        viewBox={viewBox}
         style={"margin:" + m + "px"}
         width={noimage ? undefined : width || "100%"}
         height={noimage ? undefined : height || "100%"}
@@ -90,7 +92,7 @@ const Light = ({ lightSpaceRef, ...props }) => {
   useEventListener("wheel", event => {
     if (!isDesktopRef.current) return;
     if (event.deltaY < 0) {
-      setLightPos(p => ({ ...p, z: Math.min(p.z + 2000, 30000) }));
+      setLightPos(p => ({ ...p, z: Math.min(p.z + 2000, 80000) }));
     } else {
       setLightPos(p => ({ ...p, z: Math.max(p.z - 2000, 1000) }));
     }
