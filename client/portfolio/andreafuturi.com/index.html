@@ -206,7 +206,7 @@ color: white !important;
         </svg>
 
         <h2>Welcome</h2>
-        <p>1. The pattern you will see is code-generated using a <a href="https://en.wikipedia.org/wiki/Quasiperiodicity" target="_blank" />quasiperiodic pattern</a>.</p>
+        <p>1. The pattern you will see is code-generated using a <a href="https://en.wikipedia.org/wiki/Quasiperiodicity" target="_blank" />quasiperiodic algorithm</a>.</p>
         <p>2. Move the light with your mouse (use Chrome for best performance).</p>
         <p>3. Scroll to adjust light intensity.</p>
         <p>4. Click a logo to change its color.</p>
@@ -214,7 +214,7 @@ color: white !important;
         <button id="loadingButton" disabled>
           <span style="position: relative; z-index: 1">Loading...</span>
         </button>
-        <p class="footer">Made with DenoJS, React, React Spring, and a custom SVG animation library.</p>
+        <p class="footer">Made with DenoJS, React, React Spring, and a customized SVG library.</p>
       </div>
     </div>
 
@@ -250,13 +250,11 @@ color: white !important;
 
         setTimeout(animateBackground, 2000);
 
-        // Check if a module script exists and add an error handler if so
         const moduleScript = document.querySelector('script[type="module"]');
         if (moduleScript) {
           moduleScript.onerror = hideBlackScreen;
         }
 
-        // Only add popstate event if blackScreen exists
         window.addEventListener("popstate", () => {
           if (blackScreen) {
             blackScreen.style.display = "flex";
