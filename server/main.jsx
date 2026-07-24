@@ -1,4 +1,3 @@
-import { serve } from "https://deno.land/std/http/server.ts";
 const grazie = await Deno.readTextFile("./client/grazie.html");
 async function handler(_req) {
   const portfolio = await Deno.readTextFile("./client/portfolio/andreafuturi.com/index.html");
@@ -69,4 +68,4 @@ if (pathname.endsWith(".ico")) {
   }
 }
 
-serve(handler);
+Deno.serve(handler);
