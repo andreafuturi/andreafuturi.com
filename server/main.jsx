@@ -45,6 +45,18 @@ if (pathname.endsWith(".ico")) {
       },
     });
 }
+if (pathname.endsWith(".gif")) {
+  const file = await Deno.readFile("." + pathname);
+  return new Response(file, {
+    headers: { "content-type": "image/gif" },
+  });
+}
+if (pathname.endsWith(".mp4")) {
+  const file = await Deno.readFile("." + pathname);
+  return new Response(file, {
+    headers: { "content-type": "video/mp4" },
+  });
+}
 
 
   //static js
