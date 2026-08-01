@@ -62,6 +62,9 @@ function authOk(req) {
 
 /** @param {Request} req @param {string} pathname */
 async function maybeTrack(req, pathname) {
+  if (req.method === "HEAD") return; // probes / link checkers — not a real open/click
+  const url = new URL(req.url);
+  if (url.searchParams.get("op") === "1") return; // operator/self — use only when YOU open
   const parsed = parseTeleportyMedia(pathname);
   if (!parsed) return;
   if (parsed.kind === "mp4") {
@@ -87,6 +90,23 @@ async function allHits() {
   return out;
 }
 
+/** @param {string | null} domain */
+async function resetHits(domain) {
+  const store = await getKv();
+  const deleted = [];
+  if (domain) {
+    const id = domain.toLowerCase();
+    await store.delete(["teleporty", id]);
+    deleted.push(id);
+  } else {
+    for await (const entry of store.list({ prefix: ["teleporty"] })) {
+      await store.delete(entry.key);
+      if (typeof entry.key[1] === "string") deleted.push(entry.key[1]);
+    }
+  }
+  return deleted;
+}
+
 async function handler(req) {
   const { pathname } = new URL(req.url);
 
@@ -105,6 +125,21 @@ async function handler(req) {
       });
     }
     return new Response(JSON.stringify(await allHits()), {
+      headers: { "content-type": "application/json", "cache-control": "no-store" },
+    });
+  }
+
+  // Clear teleporty hits — ?domain=x or all
+  if (pathname === "/api/teleporty/reset" && (req.method === "POST" || req.method === "GET")) {
+    if (!authOk(req)) {
+      return new Response(JSON.stringify({ error: "unauthorized" }), {
+        status: 401,
+        headers: { "content-type": "application/json" },
+      });
+    }
+    const domain = new URL(req.url).searchParams.get("domain");
+    const deleted = await resetHits(domain);
+    return new Response(JSON.stringify({ ok: true, deleted }), {
       headers: { "content-type": "application/json", "cache-control": "no-store" },
     });
   }
