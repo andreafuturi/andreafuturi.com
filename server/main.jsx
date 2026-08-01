@@ -4,7 +4,15 @@
  * Env: TELEPORTY_TRACK_SECRET (required for stats reads)
  */
 const grazie = await Deno.readTextFile("./client/grazie.html");
-const kv = await Deno.openKv();
+
+/** @type {Deno.Kv | null} */
+let kv = null;
+
+/** Lazy open — Deploy warm-up must not die if KV attach races the revision. */
+async function getKv() {
+  if (!kv) kv = await Deno.openKv();
+  return kv;
+}
 
 /** @typedef {{ openedAt: string | null, clickedAt: string | null, gifHits: number, mp4Hits: number }} TeleportyHit */
 
@@ -30,8 +38,9 @@ function parseTeleportyMedia(pathname) {
 
 /** @param {string} domain @param {'gif'|'mp4'} kind */
 async function recordHit(domain, kind) {
+  const store = await getKv();
   const key = ["teleporty", domain];
-  const cur = (await kv.get(key)).value || emptyHit();
+  const cur = (await store.get(key)).value || emptyHit();
   const now = new Date().toISOString();
   if (kind === "gif") {
     cur.gifHits = (cur.gifHits || 0) + 1;
@@ -40,7 +49,7 @@ async function recordHit(domain, kind) {
     cur.mp4Hits = (cur.mp4Hits || 0) + 1;
     if (!cur.clickedAt) cur.clickedAt = now;
   }
-  await kv.set(key, cur);
+  await store.set(key, cur);
 }
 
 /** @param {Request} req */
@@ -70,7 +79,8 @@ async function maybeTrack(req, pathname) {
 async function allHits() {
   /** @type {Record<string, TeleportyHit>} */
   const out = {};
-  for await (const entry of kv.list({ prefix: ["teleporty"] })) {
+  const store = await getKv();
+  for await (const entry of store.list({ prefix: ["teleporty"] })) {
     const domain = entry.key[1];
     if (typeof domain === "string") out[domain] = entry.value || emptyHit();
   }
@@ -109,7 +119,8 @@ async function handler(req) {
       });
     }
     const domain = one[1].toLowerCase();
-    const hit = (await kv.get(["teleporty", domain])).value || emptyHit();
+    const store = await getKv();
+    const hit = (await store.get(["teleporty", domain])).value || emptyHit();
     return new Response(JSON.stringify({ domain, ...hit }), {
       headers: { "content-type": "application/json", "cache-control": "no-store" },
     });
