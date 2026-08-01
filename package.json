@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "start": "npm run dev-client & npm run dev-server",
-    "prod-server": "deno run --unstable --allow-env --watch --no-check --allow-read --allow-ffi --allow-run --allow-write --allow-net --allow-sys=networkInterfaces server/main.jsx",
-    "dev-server": "deno run --unstable --allow-env --watch --no-check --allow-read --allow-ffi --allow-run --allow-write --allow-net --allow-sys=networkInterfaces server/main.jsx --dev",
+    "prod-server": "deno run --unstable-kv --unstable --allow-env --watch --no-check --allow-read --allow-ffi --allow-run --allow-write --allow-net --allow-sys=networkInterfaces server/main.jsx",
+    "dev-server": "deno run --unstable-kv --unstable --allow-env --watch --no-check --allow-read --allow-ffi --allow-run --allow-write --allow-net --allow-sys=networkInterfaces server/main.jsx --dev",
     "dev-client": "vite client --host",
     "preview": "npm run build & npm run prod-server",
     "build": "npm run create-index && vite build client --outDir dist --watch",
