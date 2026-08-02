@@ -190,8 +190,17 @@ async function handler(req) {
   }
   if (pathname.endsWith(".mp4")) {
     await maybeTrack(req, pathname);
-    const file = await Deno.readFile("." + pathname);
-    return new Response(file, { headers: { "content-type": "video/mp4" } });
+    // ponytail: short /assets/{domain}.mp4 aliases legacy path — one file on disk
+    const flat = pathname.match(/^\/assets\/([^/]+\.[^/]+)\.mp4$/i);
+    const diskPath = flat
+      ? `./assets/teleporty/${flat[1].toLowerCase()}/comparison.mp4`
+      : "." + pathname;
+    try {
+      const file = await Deno.readFile(diskPath);
+      return new Response(file, { headers: { "content-type": "video/mp4" } });
+    } catch {
+      return new Response("Not found", { status: 404 });
+    }
   }
   if (pathname.endsWith(".js")) {
     const file = await Deno.readTextFile("." + pathname);
@@ -218,6 +227,8 @@ async function handler(req) {
   if (m?.domain !== "glamestudio.store" || m.kind !== "mp4") throw new Error("flat mp4 parse");
   const leg = parseTeleportyMedia("/assets/teleporty/acme.it/comparison.mp4");
   if (leg?.kind !== "mp4") throw new Error("legacy mp4 parse");
+  const flatRe = /^\/assets\/([^/]+\.[^/]+)\.mp4$/i.exec("/assets/Cartapresa.IT.mp4");
+  if (!flatRe || flatRe[1].toLowerCase() !== "cartapresa.it") throw new Error("flat alias parse");
 }
 
 Deno.serve(handler);
